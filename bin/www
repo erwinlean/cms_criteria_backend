@@ -16,6 +16,9 @@ require('dotenv').config();
 var port = normalizePort(process.env.PORT || '8080');
 app.set('port', port);
 
+setTimeout(() => {
+  console.log(port)
+}, 2500);
 /**
  * Create HTTP server.
  */

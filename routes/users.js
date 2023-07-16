@@ -1,11 +1,15 @@
 "use strict";
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router(); 
+const userController = require("../controller/usersController");
+const jsonWebT = require("../middleware/jwt");
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get("/", jsonWebT,userController.allUsers);
+router.get("/:id", jsonWebT, userController.usersId);
+router.delete("/:email", jsonWebT, userController.deleteUser);
 
-module.exports = router;
+router.post("/create", userController.createUser);
+router.post("/login",userController.userLogin);
+
+module.exports = router; 
