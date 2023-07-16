@@ -2,16 +2,21 @@
 
 const jwt = require("jsonwebtoken");
 
-const jsonWebT = (req,res,next) =>{
-    jwt.verify(req.body["token-Ok"], "tokenKey"),
+const jsonWebT = (req, res, next) => {
+    const authHeader = req.headers.authorization;
 
-    function(err,ok){
-        if(err){
-            res.json(`error, token necesario ${err}`)
-        }else{
-            console.log(`funcionando token ${ok}`);
-            next();
-        };
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ error: "Invalid token" });
+    };
+
+    const token = authHeader.substring(7);
+
+    try {
+        const decoded = jwt.verify(token, "tokenKey");
+        req.decoded = decoded;
+        next();
+    } catch (err) {
+        return res.status(401).json({ error: "Invalid token" });
     };
 };
 

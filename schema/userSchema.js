@@ -27,11 +27,15 @@ const users = mongoose.Schema({
             type: Date,
             default: Date.now,
         },
-    ]
+    ],
+    filesUploaded: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'files',
+    }],
 });
 
 users.pre("save", function (next) {
-    this.password = encrypt.hashSync(this.password, 12);
+    this.password = encrypt.hashSync(this.password, 10);
     next();
 });
 

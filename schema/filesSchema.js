@@ -15,15 +15,13 @@ const files = mongoose.Schema({
         type: String,
         require: true,
     },
-    uploadDate: [
-        {
-            type: Date,
-            default: Date.now,
-        },
-    ],
+    uploadDate: {
+        type: Date,
+        default: Date.now,
+    },
     data:{
         type: Object,
-        required: true
+        require: true
     }
 });
 
