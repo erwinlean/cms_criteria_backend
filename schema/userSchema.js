@@ -5,6 +5,7 @@ const encrypt = require("bcrypt");
 
 const users = mongoose.Schema({
     name: String,
+    lastName: String,
     email: {
         type: String,
         required: true,

@@ -15,21 +15,6 @@ module.exports={
         };
     },
 
-    //usersEmail: async function(req,res,next){
-    //    try{
-    //        const userByEmail = await users.findOne({email: req.params.email});
-//
-    //        if (!userByEmail) {
-    //            console.log("Error: No se encontró coincidencia de mail");
-    //            return res.status(401).json({ error: "No se encontró coincidencia de mail" });
-    //        };
-//
-    //        res.json(userByEmail);
-    //    }catch(err){
-    //        console.log(err);
-    //    };
-    //},
-
     userLogin: async function (req, res, next) {
         try {
             const user = await users.findOne({ email: req.body.email });
@@ -45,12 +30,23 @@ module.exports={
                 return res.status(401).json({ error: "Contraseña contraseña incorrecta." });;
             };
     
-            const jwtToken = jwt.sign({
-                userName: user.name,
-            },
-            "tokenKey",{
-                expiresIn: "2h",
-            });
+            const { password, ...userWithoutPassword } = user.toObject();
+
+            const jwtToken = jwt.sign(
+                {
+                    userName: user.name,
+                    userLastName: user.lastName,
+                    userEmail: user.email,
+                    userBrand: user.brand,
+                    userCreationDate: user.creationDate,
+                    userLoginDates: user.loginDates,
+                    userFilesUploaded: user.filesUploaded
+                },
+                "tokenKey",
+                {
+                    expiresIn: "2h",
+                }
+            );
     
             // Logins register
             await users.findOneAndUpdate(
@@ -58,7 +54,7 @@ module.exports={
                 { $push: { loginDates: new Date() } }
             );
 
-            res.json({ token: jwtToken });
+            res.json({ token: jwtToken, user: userWithoutPassword });
         } catch (err) {
             console.log(err);
             next();
@@ -87,6 +83,7 @@ module.exports={
         try{
             const user = new users({
                 name:req.body.name,
+                lastName: req.body.lastName,
                 sku:req.body.sku,
                 email:req.body.email,
                 password:req.body.password,
@@ -99,8 +96,27 @@ module.exports={
                 return;
             };
 
-            const newUser = await user.save()
-            res.json(newUser)
+            const { password: userPassword, ...userWithoutPassword } = user.toObject();
+
+            const jwtToken = jwt.sign(
+                {
+                    userName: user.name,
+                    userName: user.lastName,
+                    userEmail: user.email,
+                    userBrand: user.brand,
+                    userCreationDate: user.creationDate,
+                    userLoginDates: user.loginDates,
+                    userFilesUploaded: user.filesUploaded
+                },
+                "tokenKey",
+                {
+                    expiresIn: "2h",
+                }
+            );
+    
+            await user.save();
+
+            res.json({ token: jwtToken, user: userWithoutPassword });
         }catch(err){
             console.log(err);
         };
@@ -133,5 +149,30 @@ module.exports={
             console.log(err);
             next(err);
         };
-    }    
+    },
+
+    updateUser: async function(req, res) {
+        try {
+            const { email, password, ...updatedFields } = req.body;
+    
+            const user = await users.findOne({ email });
+    
+            if (!user) {
+                return res.status(404).json({ error: 'Usuario no encontrado' });
+            };
+    
+            Object.keys(updatedFields).forEach(key => {
+                user[key] = updatedFields[key];
+            });
+    
+            await user.save();
+    
+            const { password: userPassword, ...updatedUser } = user.toObject();
+    
+            res.json(updatedUser);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: 'Error al actualizar el usuario' });
+        };
+    },    
 };
