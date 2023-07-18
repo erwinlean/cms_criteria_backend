@@ -87,7 +87,7 @@ module.exports={
             if (!userEmailHeader) {
                 return res.status(400).json({ error: 'Falta el encabezado "User-Email" en la solicitud.' });
             }
-    console.log(userEmailHeader);
+
             const userByEmail = await users.findOne({ email: userEmailHeader });
         
             if (!userByEmail) {
@@ -95,8 +95,9 @@ module.exports={
                 return res.status(401).json({ error: "No se encontró coincidencia de mail para buscar archivos" });
             };
     
-            const userFilesId = userByEmail.filesUploaded.toString();
-            const files = await Files.find({ _id: userFilesId });
+            // Search by multiple _id
+            const userFilesIdArray = userByEmail.filesUploaded.map((fileId) => fileId.toString());
+            const files = await Files.find({ _id: { $in: userFilesIdArray } });    
     
             res.json(files);
         } catch (error) {

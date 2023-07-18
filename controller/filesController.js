@@ -3,6 +3,7 @@
 const axios = require('axios'); // Post a akeneo
 const Files = require ("../schema/filesSchema");
 const users = require("../schema/userSchema");
+const descripcion  = require("../ia-api/openai");
 
 module.exports = {
     createFile: async function (req, res) {
@@ -31,7 +32,9 @@ module.exports = {
 
             // Post to Akeneo
             const akeneoData = file.data;
+            descripcion(akeneoData);            
             console.log(akeneoData);
+
             //await axios.post('urlToAkeneo', akeneoData);
 
             res.status(201).json(savedFile);

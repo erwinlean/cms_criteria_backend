@@ -9,54 +9,11 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // User request
-const user_promped = [
-    {
-        "sku": "1,231,237",
-        "label": "harina",
-        "brand": "pepito",
-        "description": "",
-        "type": "comida"
-    },
-    {
-        "sku": "32,423",
-        "label": "cacao",
-        "brand": "coco",
-        "description": "",
-        "type": "comida"
-    },
-    {
-        "sku": "12,346",
-        "label": "sal",
-        "brand": "pepito",
-        "description": "",
-        "type": "condimento"
-    },
-    {
-        "sku": "54,762",
-        "label": "azucar",
-        "brand": "coco",
-        "description": "",
-        "type": "condimento"
-    },
-    {
-        "sku": "87,454",
-        "label": "pizza",
-        "brand": "pepito",
-        "description": "",
-        "type": "comida"
-    },
-    {
-        "sku": "345,123",
-        "label": "hamburguesa",
-        "brand": "coco",
-        "description": "",
-        "type": "comida"
-    }
-];
+const user_promped = [];
 const lenguaje = {
         Peru: "Peru",
         Agentina: "Argentina"
-}
+};
 
 // ChatBot
 async function send_get_request(quest) {
@@ -77,9 +34,18 @@ async function send_get_request(quest) {
         console.log(chatCompletion.data.choices[0].message);
     }catch(err){
         console.log("Error: " + err.message);
-    }
+    };
 };
 
-user_promped.forEach((element)=>{
-    send_get_request(element);
-});
+async function descripcion(inc) {
+    try {
+        for (const element of inc) {
+            const response = await send_get_request(element);
+            console.log(response);
+        };
+    } catch (err) {
+        console.log("Error: " + err);
+    };
+};
+
+module.exports = descripcion;
