@@ -4,6 +4,7 @@ const bcrypt = require ("bcrypt");
 const jwt = require("jsonwebtoken");
 const users = require ("../schema/userSchema"); 
 const Files = require ("../schema/filesSchema");
+const encrypt = require("bcrypt");
 
 module.exports={
     allUsers: async function(req,res,next){
@@ -13,6 +14,25 @@ module.exports={
         }catch(err){
             console.log(err);
         };
+    },
+
+    userByEmail: async function(req,res,next){
+        try {
+            const userEmail = req.header('User-Email');
+    
+            const user = await users.findOne({ email: userEmail });
+    
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+    
+            const loginDates = user.loginDates;
+    
+            res.json({ loginDates });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: 'Internal server error' });
+        }
     },
 
     userLogin: async function (req, res, next) {
@@ -63,16 +83,21 @@ module.exports={
 
     findFilesByUser: async function (req, res) {
         try {
-            const userByEmail = await users.findOne({ email: req.body.email });
-    
+            const userEmailHeader = req.headers['user-email'];
+            if (!userEmailHeader) {
+                return res.status(400).json({ error: 'Falta el encabezado "User-Email" en la solicitud.' });
+            }
+    console.log(userEmailHeader);
+            const userByEmail = await users.findOne({ email: userEmailHeader });
+        
             if (!userByEmail) {
                 console.log("Error: No se encontró coincidencia de mail");
                 return res.status(401).json({ error: "No se encontró coincidencia de mail para buscar archivos" });
             };
-
+    
             const userFilesId = userByEmail.filesUploaded.toString();
             const files = await Files.find({ _id: userFilesId });
-
+    
             res.json(files);
         } catch (error) {
             res.status(500).json({ error: 'Error al buscar los archivos' });
@@ -81,27 +106,30 @@ module.exports={
 
     createUser: async function(req,res,next){
         try{
-            const user = new users({
-                name:req.body.name,
-                lastName: req.body.lastName,
-                sku:req.body.sku,
-                email:req.body.email,
-                password:req.body.password,
-                brand: req.body.brand
-            });
+            const { name, lastName, sku, email, password, brand } = req.body;
 
             const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-            if (!passwordRegex.test(user.password)) {
-                console.log("Error: The password must contain at least 8 characters, including letters and numbers.");
-                return;
-            };
+            if (!passwordRegex.test(password)) {
+                return res.status(400).json({ error: "The password must contain at least 8 characters, including letters and numbers." });
+            }
+
+            const hashedPassword = encrypt.hashSync(password, 10);
+
+            const user = new users({
+                name,
+                lastName,
+                sku,
+                email,
+                password: hashedPassword,
+                brand
+            });
 
             const { password: userPassword, ...userWithoutPassword } = user.toObject();
 
             const jwtToken = jwt.sign(
                 {
                     userName: user.name,
-                    userName: user.lastName,
+                    userLastName: user.lastName,
                     userEmail: user.email,
                     userBrand: user.brand,
                     userCreationDate: user.creationDate,
@@ -156,17 +184,21 @@ module.exports={
             const { email, password, ...updatedFields } = req.body;
     
             const user = await users.findOne({ email });
-    
+
             if (!user) {
                 return res.status(404).json({ error: 'Usuario no encontrado' });
             };
-    
+
             Object.keys(updatedFields).forEach(key => {
                 user[key] = updatedFields[key];
             });
-    
+
+            if (password) {
+                const hashedPassword = encrypt.hashSync(password, 10);
+                user.password = hashedPassword;
+            };
+
             await user.save();
-    
             const { password: userPassword, ...updatedUser } = user.toObject();
     
             res.json(updatedUser);

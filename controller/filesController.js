@@ -1,6 +1,6 @@
 "use strict";
 
-const axios = require('axios');
+const axios = require('axios'); // Post a akeneo
 const Files = require ("../schema/filesSchema");
 const users = require("../schema/userSchema");
 

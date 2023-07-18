@@ -1,7 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const encrypt = require("bcrypt");
+//const encrypt = require("bcrypt");
 
 const users = mongoose.Schema({
     name: String,
@@ -35,9 +35,10 @@ const users = mongoose.Schema({
     }],
 });
 
-users.pre("save", function (next) {
-    this.password = encrypt.hashSync(this.password, 10);
-    next();
-});
+// Works, but generates conflicts with the PUT requests for update information. Must be handled in the controller
+//users.pre("save", function (next) { 
+//    this.password = encrypt.hashSync(this.password, 10);
+//    next();
+//});
 
 module.exports = mongoose.model("users", users);

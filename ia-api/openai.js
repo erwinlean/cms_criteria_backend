@@ -9,9 +9,54 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // User request
-const user_promped = ["can you tell me something?", "another thing?"];
-const context = []; // Use for the IA check the last responses and have context
-const lenguaje = "spanish";
+const user_promped = [
+    {
+        "sku": "1,231,237",
+        "label": "harina",
+        "brand": "pepito",
+        "description": "",
+        "type": "comida"
+    },
+    {
+        "sku": "32,423",
+        "label": "cacao",
+        "brand": "coco",
+        "description": "",
+        "type": "comida"
+    },
+    {
+        "sku": "12,346",
+        "label": "sal",
+        "brand": "pepito",
+        "description": "",
+        "type": "condimento"
+    },
+    {
+        "sku": "54,762",
+        "label": "azucar",
+        "brand": "coco",
+        "description": "",
+        "type": "condimento"
+    },
+    {
+        "sku": "87,454",
+        "label": "pizza",
+        "brand": "pepito",
+        "description": "",
+        "type": "comida"
+    },
+    {
+        "sku": "345,123",
+        "label": "hamburguesa",
+        "brand": "coco",
+        "description": "",
+        "type": "comida"
+    }
+];
+const lenguaje = {
+        Peru: "Peru",
+        Agentina: "Argentina"
+}
 
 // ChatBot
 async function send_get_request(quest) {
@@ -21,10 +66,10 @@ async function send_get_request(quest) {
             model: "gpt-3.5-turbo",
             messages: [{
                 role:"system",
-                content:`You are friendly chat bot, limited with 100 words per answer.Always respond with zoombies thematic related. Your lenguaje for responses will be always and 100% ${lenguaje}`
+                content:`You are inteligent IA who will complete the descripcion based on the other data of the current object. Your lenguaje for responses will be in ${lenguaje.Peru}`
             },{
                 role: "user", 
-                content: `Question:\n${quest}`
+                content: `Question:\n${JSON.stringify(quest)}`
             }],
             temperature: 0
         });
