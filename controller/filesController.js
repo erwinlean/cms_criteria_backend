@@ -1,9 +1,9 @@
 "use strict";
 
-const axios = require('axios'); // Post a akeneo
 const Files = require ("../schema/filesSchema");
 const users = require("../schema/userSchema");
-const descripcion  = require("../ia-api/openai");
+const createDOMPurify = require('dompurify');
+const pimMain = require("../akeneo/main");
 
 module.exports = {
     createFile: async function (req, res) {
@@ -17,8 +17,21 @@ module.exports = {
                 data,
             });
 
-            const savedFile = await file.save();
 
+            // Purify data before continue
+            const dangerousContent = ["vbscript:","eval()", "exec()", "<script>"];
+            const containsDangerousContent = [fileName, brand, userUpload, data].some(prop => {
+                const lowerCaseProp = prop.toLowerCase();
+                return dangerousContent.some(content => lowerCaseProp.includes(content));
+            });
+
+            if (containsDangerousContent) {
+                console.log('Data malisius detected: ' + containsDangerousContent);
+                return;
+            };
+
+            // If doenst detect any malisius content and is already purified, continue...
+            const savedFile = await file.save();
             // Upload file to the user
             const user = await users.findOneAndUpdate(
                 { email: userUpload },
@@ -29,14 +42,12 @@ module.exports = {
                 },
                 { new: true }
             );
+            
+            const checkedData = file.data;
 
-            // Post to Akeneo
-            const akeneoData = file.data;
-            descripcion(akeneoData);            
-            console.log(akeneoData);
-
-            //await axios.post('urlToAkeneo', akeneoData);
-
+            // All PIM modify data and methods inside the main
+            pimMain.postProduct(checkedData);
+            
             res.status(201).json(savedFile);
         } catch (error) {
             console.log(error);
