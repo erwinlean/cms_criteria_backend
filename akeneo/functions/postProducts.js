@@ -3,7 +3,7 @@
 const axios = require(`axios`);
 
 async function postProduct(token, data) {
-    const postUrl = "";
+    const postUrl = "http://192.168.100.45/api/rest/v1/products";
 
     const options = {
         method: 'POST',
@@ -15,21 +15,14 @@ async function postProduct(token, data) {
         data: JSON.stringify(data)
     };
     
-    axios(options)
-    .then(res => {
-        if (res.status === 200) {
-            const response = res;
-    
-            console.log(response);
-            
-            return response;
-        };
-    })
-    .catch(error => {
+    try {
+        const response = await axios(options);
+        
+        return response;
+    } catch (error) {
         console.log('Error posting data:', error.response.data);
-        throw new Error('Error posting data')
-    });      
-
+        throw new Error('Error posting data');
+    };
 };
 
 module.exports = postProduct;

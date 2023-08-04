@@ -1,7 +1,5 @@
 "use strict";
 
-const axios = require('axios');
-
 const getToken = require("../token/tokenObtencion");
 const getProducts = require("./getProducts");
 
