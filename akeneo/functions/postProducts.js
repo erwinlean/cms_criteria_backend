@@ -10,7 +10,7 @@ async function postProduct(token, data) {
         url: postUrl,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Basic ${token}`
+            'Authorization': `Bearer ${token}`
         },
         data: JSON.stringify(data)
     };

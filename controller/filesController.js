@@ -2,7 +2,6 @@
 
 const Files = require ("../schema/filesSchema");
 const users = require("../schema/userSchema");
-const createDOMPurify = require('dompurify');
 const pimMain = require("../akeneo/main");
 
 module.exports = {
@@ -46,7 +45,7 @@ module.exports = {
             const checkedData = file.data;
 
             // All PIM modify data and methods inside the main
-            pimMain.postProduct(checkedData);
+            pimMain.postProductPim(checkedData);
             
             res.status(201).json(savedFile);
         } catch (error) {

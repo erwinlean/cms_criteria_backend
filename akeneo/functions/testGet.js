@@ -10,6 +10,8 @@ async function main() {
         if (accessToken) {
             const res = await getProducts(accessToken);
 
+            console.log(res);
+            
             res._embedded.items.forEach(element => {
                 console.log(element.values);
             });

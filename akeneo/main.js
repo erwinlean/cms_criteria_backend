@@ -9,7 +9,7 @@ const postProduct = require("./functions/postProducts");
 // Main
 module.exports = {
     // Main get products
-    getProductsAkeneo: async function (){
+    getProductsPim: async function (){
         try {
             const accessToken = await getToken();
 
@@ -22,7 +22,7 @@ module.exports = {
     },
 
     // Post products and match data incoming to the PIM schema needed
-    postProduct:async function (data){
+    postProductPim:async function (data){
         try {
             // Get token and post on the PIM
             const accessToken = await getToken();
