@@ -2,7 +2,7 @@
 
 const Files = require ("../schema/filesSchema");
 const users = require("../schema/userSchema");
-const pimMain = require("../akeneo/main");
+const pimMain = require("../pim/main");
 
 module.exports = {
     createFile: async function (req, res) {
@@ -15,19 +15,6 @@ module.exports = {
                 brand,
                 data,
             });
-
-
-            // Purify data before continue
-            //const dangerousContent = ["vbscript:","eval()", "exec()", "<script>"];
-            //const containsDangerousContent = [fileName, brand, userUpload, data].some(prop => {
-            //    const lowerCaseProp = prop.toLowerCase();
-            //    return dangerousContent.some(content => lowerCaseProp.includes(content));
-            //});
-//
-            //if (containsDangerousContent) {
-            //    console.log('Data malisius detected: ' + containsDangerousContent);
-            //    return;
-            //};
 
             // If doenst detect any malisius content and is already purified, continue...
             const savedFile = await file.save();
@@ -42,10 +29,10 @@ module.exports = {
                 { new: true }
             );
             
-            const checkedData = file.data;
+            const attributesData = file.data;
 
             // All PIM modify data and methods inside the main
-            checkedData.forEach(element => {
+            attributesData.forEach(element => {
                 pimMain.postProductPim(element);
             });
             
