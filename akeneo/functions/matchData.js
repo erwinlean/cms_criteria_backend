@@ -8,18 +8,16 @@ function matchData(values) {
         throw new Error("Values are not objects");
     };
 
-    /* notes from values(xlsx data)
-        uui = label/name
-        sku = identifier
-        crear categorias = categorias pre_aproved
-        everything else goes to attributes
-    */
-        
-    const { uuid, identifier, categories ,attributes } = values;
+    const { identifier , attributes } = values;
 
-    const akeneoSchema = schema(uuid, identifier, categories, attributes);
+    // Test data
+    //console.log(values);
+    console.log("...")
+    console.log("attributes: " + attributes);
+
+    const akeneoSchema = schema (identifier, attributes);
 
     return akeneoSchema;
-}
+};
 
 module.exports = matchData;

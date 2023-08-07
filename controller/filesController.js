@@ -18,16 +18,16 @@ module.exports = {
 
 
             // Purify data before continue
-            const dangerousContent = ["vbscript:","eval()", "exec()", "<script>"];
-            const containsDangerousContent = [fileName, brand, userUpload, data].some(prop => {
-                const lowerCaseProp = prop.toLowerCase();
-                return dangerousContent.some(content => lowerCaseProp.includes(content));
-            });
-
-            if (containsDangerousContent) {
-                console.log('Data malisius detected: ' + containsDangerousContent);
-                return;
-            };
+            //const dangerousContent = ["vbscript:","eval()", "exec()", "<script>"];
+            //const containsDangerousContent = [fileName, brand, userUpload, data].some(prop => {
+            //    const lowerCaseProp = prop.toLowerCase();
+            //    return dangerousContent.some(content => lowerCaseProp.includes(content));
+            //});
+//
+            //if (containsDangerousContent) {
+            //    console.log('Data malisius detected: ' + containsDangerousContent);
+            //    return;
+            //};
 
             // If doenst detect any malisius content and is already purified, continue...
             const savedFile = await file.save();
@@ -45,7 +45,9 @@ module.exports = {
             const checkedData = file.data;
 
             // All PIM modify data and methods inside the main
-            pimMain.postProductPim(checkedData);
+            checkedData.forEach(element => {
+                pimMain.postProductPim(element);
+            });
             
             res.status(201).json(savedFile);
         } catch (error) {

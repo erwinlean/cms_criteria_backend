@@ -22,16 +22,17 @@ module.exports = {
     },
 
     // Post products and match data incoming to the PIM schema needed
-    postProductPim:async function (data){
+    postProductPim: async function (data){
         try {
             // Get token and post on the PIM
             const accessToken = await getToken();
             
             if (accessToken) {
                 // Post perse
-                const res = await postProducts(accessToken, matchData(testValues));
+                const res = await postProduct(accessToken, matchData(data));
 
-                console.log(res);
+                //console.log(res);
+                console.log("post eneded");
             };
         } catch (error) {
             console.error('Something went wrong:', error.message);
