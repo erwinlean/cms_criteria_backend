@@ -58,6 +58,7 @@ module.exports={
                     userLastName: user.lastName,
                     userEmail: user.email,
                     userBrand: user.brand,
+                    userBrand: user.rol,
                     userCreationDate: user.creationDate,
                     userLoginDates: user.loginDates,
                     userFilesUploaded: user.filesUploaded
@@ -107,7 +108,7 @@ module.exports={
 
     createUser: async function(req,res,next){
         try{
-            const { name, lastName, sku, email, password, brand } = req.body;
+            const { name, lastName, sku, email, password, brand, rol } = req.body;
 
             const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
             if (!passwordRegex.test(password)) {
@@ -122,7 +123,8 @@ module.exports={
                 sku,
                 email,
                 password: hashedPassword,
-                brand
+                brand,
+                rol
             });
 
             const { password: userPassword, ...userWithoutPassword } = user.toObject();
@@ -133,6 +135,7 @@ module.exports={
                     userLastName: user.lastName,
                     userEmail: user.email,
                     userBrand: user.brand,
+                    userBrand: user.rol,
                     userCreationDate: user.creationDate,
                     userLoginDates: user.loginDates,
                     userFilesUploaded: user.filesUploaded

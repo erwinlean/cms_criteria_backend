@@ -19,6 +19,10 @@ const users = mongoose.Schema({
         type: String,
         require: true,
     },
+    rol: {
+        type: String,
+        require: true,
+    },
     creationDate: {
         type: Date,
         default: Date.now,

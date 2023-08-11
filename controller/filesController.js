@@ -45,9 +45,17 @@ module.exports = {
 
     allFiles: async function (req, res, next) {
         try {
-            const files = await Files.find();
-    
-            res.json(files);
+            const { rol, email } = req.body;
+            
+            if (rol === "admin") {
+                const files = await Files.find();
+                res.json(files);
+            } else if (rol === "provider") {
+                const files = await Files.find({ uploadedBy: email });
+                res.json(files);
+            } else {
+                res.status(403).json({ error: 'Unauthorized role' });
+            };
         } catch (error) {
             res.status(500).json({ error: 'Error al buscar los archivos' });
         };
