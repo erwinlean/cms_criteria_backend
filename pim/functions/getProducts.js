@@ -2,14 +2,14 @@
 
 const axios = require('axios');
 
-async function getProducts(token) {
+async function getProducts(token, code) {
 
-    const getProductsUrl = "http://192.168.100.45/api/rest/v1/products";
+    const getProductByCode = `http://192.168.100.45/api/rest/v1/products/${code}`;
 
     try {
         const options = {
             method: 'GET',
-            url: getProductsUrl,
+            url: getProductByCode,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -19,13 +19,12 @@ async function getProducts(token) {
         const response = await axios(options);
         if (response.status === 200) {
             const products = response.data;
-            console.log(products);
             
             return products;
         };
 
     } catch (error) {
-        console.log('Error getting data:', error.response ? error.response.data : error.message);
+        console.error('Error getting data:', error.response ? error.response.data : error.message);
         throw new Error('Error getting data');
     };
 };

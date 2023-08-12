@@ -17,8 +17,7 @@ const files = mongoose.Schema({
     },
     uploadDate: {
         type: Date,
-        default: Date.now,
-        enum: ["admin", "provider", "consumer"]
+        default: Date.now
     },
     data:{
         type: Object,

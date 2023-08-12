@@ -1,0 +1,48 @@
+project_root/
+|-- bin/
+|   |-- www.js
+|-- controllers/
+|   |-- consumerController.js
+|   |-- index.js
+|   |-- userController.js
+|-- db
+|   |-- config.js
+|-- ai-api
+|   |-- functions
+|   |   |-- openai.js
+|   |-- main.js
+|-- middlewares
+|   |-- cors.js
+|   |-- createToken.js
+|   |-- errorHandler.js
+|   |-- tokenVerify.js
+|-- node_Modules
+|-- pim
+|   |-- functions
+|   |   |-- getProducts.js
+|   |   |-- matchData.js
+|   |   |-- postProducts.js
+|   |-- pimSchema
+|   |   |-- dataSchema.js
+|   |-- token
+|   |   |-- tokenObtencion.js
+|   |-- main.js
+|-- public
+|-- routes
+|   |-- consumer.js
+|   |-- files.js
+|   |-- index.js
+|   |-- user.js
+|-- schemas
+|   |-- filesSchema.js
+|   |-- userSchema.js
+|-- test
+|   |-- index.test.js
+|-- utils
+|   |-- userUtils.js
+|-- views
+|-- .env
+|-- .gitignore
+|-- app.js
+|-- package-lock.json
+|-- package.json

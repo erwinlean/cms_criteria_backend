@@ -8,31 +8,29 @@ const postProduct = require("./functions/postProducts");
 
 // Main
 module.exports = {
-    // Main get products
-    getProductsPim: async function (){
+
+    getProductsPim: async function (code){
         try {
             const accessToken = await getToken();
 
             if (accessToken) {
-                await getProducts(accessToken);
+                await getProducts(accessToken, code);
             };
         } catch (error) {
             console.error('Something went wrong:', error.message);
         };
     },
 
-    // Post products and match data incoming to the PIM schema needed
     postProductPim: async function (data){
         try {
-            // Get token and post on the PIM
+
             const accessToken = await getToken();
             
             if (accessToken) {
-                // Post perse
+
                 const res = await postProduct(accessToken, matchData(data));
 
-                //console.log(res);
-                console.log("post eneded");
+                console.log(`post eneded {data.identifier}`);
             };
         } catch (error) {
             console.error('Something went wrong:', error.message);

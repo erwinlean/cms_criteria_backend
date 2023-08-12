@@ -1,7 +1,6 @@
 "use strict";
 
 const mongoose = require("mongoose");
-//const encrypt = require("bcrypt");
 
 const users = mongoose.Schema({
     name: String,
@@ -22,6 +21,7 @@ const users = mongoose.Schema({
     rol: {
         type: String,
         require: true,
+        enum: ["admin", "provider", "consumer"]
     },
     creationDate: {
         type: Date,
@@ -38,11 +38,5 @@ const users = mongoose.Schema({
         ref: 'files',
     }],
 });
-
-// Works, but generates conflicts with the PUT requests for update information. Must be handled in the controller
-//users.pre("save", function (next) { 
-//    this.password = encrypt.hashSync(this.password, 10);
-//    next();
-//});
 
 module.exports = mongoose.model("users", users);

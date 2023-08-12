@@ -5,10 +5,11 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const cors = require('cors');
 const db = require ("./db/config");
+const cors = require("./middlewares/cors");
 
 const indexRouter = require('./routes/index');
+const consumerRouter = require('./routes/consumer');
 const userRouter = require('./routes/users');
 const fileController = require('./routes/files');
 
@@ -20,11 +21,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Cors
-const corsOptions = {
-  origin: '*'
-};
-app.use(cors(corsOptions));
+app.use(cors);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -38,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api/', indexRouter);
+app.use('/api/consumer', consumerRouter);
 app.use('/api/users', userRouter);
 app.use("/api/files", fileController);
 

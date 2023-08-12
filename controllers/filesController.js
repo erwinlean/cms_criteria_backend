@@ -1,8 +1,8 @@
 "use strict";
 
-const Files = require ("../schema/filesSchema");
-const users = require("../schema/userSchema");
-const pimMain = require("../pim/main");
+const Files = require("../schemas/filesSchema");
+const Users = require("../schemas/userSchema");
+const Pim = require("../pim/main");
 
 module.exports = {
     createFile: async function (req, res) {
@@ -16,48 +16,50 @@ module.exports = {
                 data,
             });
 
-            // If doenst detect any malisius content and is already purified, continue...
+            // If doesn't detect any malicious content and is already purified, continue...
             const savedFile = await file.save();
+            
             // Upload file to the user
-            const user = await users.findOneAndUpdate(
+            await Users.findOneAndUpdate(
                 { email: userUpload },
-                { 
-                    $push: { 
+                {
+                    $push: {
                         filesUploaded: savedFile,
-                    }
+                    },
                 },
                 { new: true }
             );
-            
-            const attributesData = file.data;
 
             // All PIM modify data and methods inside the main
-            attributesData.forEach(element => {
-                pimMain.postProductPim(element);
-            });
+            const attributesData = file.data;
+            await Promise.all(attributesData.map(element => Pim.postProductPim(element)));
             
             res.status(201).json(savedFile);
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ error: 'Error al crear el archivo' });
+            console.error(error);
+            res.status(500).json({ error: 'Error creating the file' });
         };
     },
 
-    allFiles: async function (req, res, next) {
+    getFiles: async function (req, res) {
         try {
             const { rol, email } = req.body;
-            
+
             if (rol === "admin") {
                 const files = await Files.find();
                 res.json(files);
             } else if (rol === "provider") {
-                const files = await Files.find({ uploadedBy: email });
-                res.json(files);
+                if (email) {
+                    const files = await Files.find({ userUpload: email });
+                    res.json(files);
+                } else {
+                    res.status(400).json({ error: 'Email missing in request' });
+                };
             } else {
                 res.status(403).json({ error: 'Unauthorized role' });
             };
         } catch (error) {
-            res.status(500).json({ error: 'Error al buscar los archivos' });
+            res.status(500).json({ error: 'Error searching for the files' });
         };
     },
 
@@ -68,20 +70,20 @@ module.exports = {
             if (deletedFile) {
                 res.json(deletedFile);
             } else {
-                res.status(404).json({ error: 'Archivo no encontrado' });
+                res.status(404).json({ error: 'File missing' });
             }
         } catch (error) {
-            res.status(500).json({ error: 'Error al eliminar el archivo' });
+            res.status(500).json({ error: 'Error deleting the file' });
         };
     },
 
-    deleteAllUsers: async function (req, res, next) {
+    deleteAllFiles: async function (req, res, next) {
         try {
             await Files.deleteMany();
-        
+
             res.json({ message: "All Files deleted successfully" });
         } catch (err) {
-            console.log(err);
+            console.error(err);
             next(err);
         };
     }
