@@ -9,7 +9,7 @@ chai.should();
 
 describe("Api index", () => {
     describe("GET /", () => {
-        it("Should return error, bad path", (done) => {
+        it("Should return Error, bad path", (done) => {
             chai.request(app)
                 .get("/")
                 .end((err, res) => {
@@ -23,7 +23,7 @@ describe("Api index", () => {
 
 describe("Api index", () => {
     describe("GET /api/", () => {
-        it("Should return error, bad path", (done) => {
+        it("Should return Error, bad path", (done) => {
             chai.request(app)
                 .get("/api/")
                 .end((err, res) => {
