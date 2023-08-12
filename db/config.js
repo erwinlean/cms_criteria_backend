@@ -2,9 +2,12 @@
 
 const mongoose = require('mongoose');
 require('dotenv').config();
-const dbUser = process.env.DB_USER
-const dbPassword = process.env.DB_PASSWORD
-const dbHost = process.env.DB_HOST
+//const dbUser = process.env.DB_USER
+//const dbPassword = process.env.DB_PASSWORD
+//const dbHost = process.env.DB_HOST
+const dbUser = "emarte"
+const dbPassword = "9BsY4MKvO870jx8u"
+const dbHost = "cluster0.cpknn39.mongodb.net"
 
 const url = `mongodb+srv://${dbUser}:${dbPassword}@${dbHost}/?retryWrites=true&w=majority`;
 

@@ -2,7 +2,7 @@
 
 const users = require ("../schemas/userSchema"); 
 const bcrypt = require("bcrypt");
-const { createJwtToken } = require("../middlewares/createToken");
+const { createJwtToken } = require("../middlewares/authCreate");
 const { validatePassword, hashPassword } = require("../utils/userUtils");
 
 module.exports={

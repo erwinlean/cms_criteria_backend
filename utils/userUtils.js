@@ -2,9 +2,9 @@
 
 const bcrypt = require("bcrypt");
 
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
 const validatePassword = password => {
+    const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
     return PASSWORD_REGEX.test(password);
 };
 

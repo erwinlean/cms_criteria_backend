@@ -1,9 +1,11 @@
-project_root/
+project/
 |-- bin/
 |   |-- www.js
 |-- controllers/
 |   |-- consumerController.js
-|   |-- index.js
+|   |-- authController.js
+|   |-- filesController.js
+|   |-- indexController.js
 |   |-- userController.js
 |-- db
 |   |-- config.js
@@ -29,6 +31,7 @@ project_root/
 |   |-- main.js
 |-- public
 |-- routes
+|   |-- auth.js
 |   |-- consumer.js
 |   |-- files.js
 |   |-- index.js
@@ -37,7 +40,11 @@ project_root/
 |   |-- filesSchema.js
 |   |-- userSchema.js
 |-- test
+|   |-- auth.test.js
 |   |-- index.test.js
+|   |-- users.test.js
+|   |-- files.test.js
+|   |-- consumer.test.js
 |-- utils
 |   |-- userUtils.js
 |-- views

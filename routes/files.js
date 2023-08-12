@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router(); 
 const filesController = require("../controllers/filesController");
-const jsonWebT = require("../middlewares/tokenVerify");
+const jsonWebT = require("../middlewares/authVerify");
 
 router.get("/", jsonWebT, filesController.getFiles);
 router.post("/create", jsonWebT, filesController.createFile);

@@ -6,6 +6,8 @@ async function getProducts(token, code) {
 
     const getProductByCode = `http://192.168.100.45/api/rest/v1/products/${code}`;
 
+    console.log("product code: " + code);
+
     try {
         const options = {
             method: 'GET',
@@ -13,11 +15,12 @@ async function getProducts(token, code) {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            body: {'Content-Type': 'application/json'}
         };
 
         const response = await axios(options);
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
             const products = response.data;
             
             return products;

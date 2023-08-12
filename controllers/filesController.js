@@ -2,7 +2,7 @@
 
 const Files = require("../schemas/filesSchema");
 const Users = require("../schemas/userSchema");
-const Pim = require("../pim/main");
+const { postProductPim } = require("../pim/main");
 
 module.exports = {
     createFile: async function (req, res) {
@@ -16,7 +16,6 @@ module.exports = {
                 data,
             });
 
-            // If doesn't detect any malicious content and is already purified, continue...
             const savedFile = await file.save();
             
             // Upload file to the user
@@ -32,7 +31,7 @@ module.exports = {
 
             // All PIM modify data and methods inside the main
             const attributesData = file.data;
-            await Promise.all(attributesData.map(element => Pim.postProductPim(element)));
+            attributesData.forEach(element => { postProductPim(element) });
             
             res.status(201).json(savedFile);
         } catch (error) {

@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = express.Router(); 
-const consumer = require("../controllers/consumerInformation");
-const jsonWebT = require("../middlewares/tokenVerify");
+const { getProduct } = require("../controllers/consumerController");
+const jsonWebT = require("../middlewares/authVerify");
 
-router.get("/", jsonWebT, consumer.getProduct);
+router.post("/", jsonWebT, getProduct);
 
 module.exports = router;

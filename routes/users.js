@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router(); 
 const userController = require("../controllers/usersController");
-const jsonWebT = require("../middlewares/tokenVerify");
+const jsonWebT = require("../middlewares/authVerify");
 
 router.get("/", jsonWebT, userController.allUsers);
 router.get("/userLogins", jsonWebT, userController.userByEmail);

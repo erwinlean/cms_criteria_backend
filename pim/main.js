@@ -13,8 +13,12 @@ module.exports = {
         try {
             const accessToken = await getToken();
 
+            console.log("code on the main: " + code)
+
             if (accessToken) {
-                await getProducts(accessToken, code);
+                const res = await getProducts(accessToken, code);
+
+                return res;
             };
         } catch (error) {
             console.error('Something went wrong:', error.message);

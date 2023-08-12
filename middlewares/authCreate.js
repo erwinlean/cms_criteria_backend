@@ -21,6 +21,17 @@ module.exports = {
                 expiresIn: "2h",
             }
         );
+    },
+
+    createJwtTokenDev: function () {
+        return jwt.sign(
+            {
+                role: "developer",
+            },
+            "tokenKey",
+            {
+                expiresIn: "24h",
+            }
+        );
     }
-    
 };
