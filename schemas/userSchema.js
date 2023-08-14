@@ -18,7 +18,7 @@ const users = mongoose.Schema({
         type: String,
         require: true,
     },
-    rol: {
+    role: {
         type: String,
         require: true,
         enum: ["admin", "provider", "consumer"]

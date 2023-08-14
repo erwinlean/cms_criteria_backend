@@ -30,6 +30,10 @@ module.exports = {
             );
 
             // All PIM modify data and methods inside the main
+            if(file.data.length == 0){
+                res.status(500).json({ error: 'No data to post on PIM' });
+            };
+
             const attributesData = file.data;
             attributesData.forEach(element => { postProductPim(element) });
             
@@ -42,14 +46,16 @@ module.exports = {
 
     getFiles: async function (req, res) {
         try {
-            const { rol, email } = req.body;
+            const userEmail = req.header('User-Email');
 
-            if (rol === "admin") {
+            const user = await Users.findOne({ email: userEmail });
+
+            if (user.role === "admin") {
                 const files = await Files.find();
                 res.json(files);
-            } else if (rol === "provider") {
-                if (email) {
-                    const files = await Files.find({ userUpload: email });
+            } else if (user.role === "provider") {
+                if (userEmail) {
+                    const files = await Files.find({ userUpload: userEmail });
                     res.json(files);
                 } else {
                     res.status(400).json({ error: 'Email missing in request' });

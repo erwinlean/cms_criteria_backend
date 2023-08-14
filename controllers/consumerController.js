@@ -11,8 +11,6 @@ module.exports = {
                 res.status(403).json({ error: 'Product code is required' });
             };
 
-            console.log("code on the consumerController: " + code);
-
             const product = await getProductsPim(code);
 
             res.status(200).json(product);

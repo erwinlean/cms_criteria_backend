@@ -2,13 +2,13 @@
 
 const express = require('express');
 const router = express.Router(); 
-const filesController = require("../controllers/filesController");
+const {getFiles, createFile, deleteFile, deleteAllFiles } = require("../controllers/filesController");
 const jsonWebT = require("../middlewares/authVerify");
 
-router.get("/", jsonWebT, filesController.getFiles);
-router.post("/create", jsonWebT, filesController.createFile);
-router.delete("/:fileName/:userUpload", jsonWebT, filesController.deleteFile);
+router.get("/", jsonWebT, getFiles);
+router.post("/create", jsonWebT, createFile);
+router.delete("/:fileName/:userUpload", jsonWebT, deleteFile);
 
-router.delete("/", jsonWebT, filesController.deleteAllFiles);
+router.delete("/", jsonWebT, deleteAllFiles);
 
 module.exports = router;

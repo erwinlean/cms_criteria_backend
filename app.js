@@ -38,8 +38,8 @@ app.use("/", indexRouter);                   // tested fine > mocha chai + postm
 app.use("/api/", indexRouter);               // tested fine > mocha chai + postman
 app.use("/api/oAuth", oAuthRouter);          // tested fine > mocha chai + postman
 app.use("/api/consumer", consumerRouter);    // tested fine > postman
-app.use("/api/users", userRouter);           // 
-app.use("/api/files", fileController);       //  
+app.use("/api/users", userRouter);           // tested fine > postman
+app.use("/api/files", fileController);       // tested fine > postman + frontend
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

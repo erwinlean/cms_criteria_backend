@@ -1,9 +1,11 @@
 "use strict";
 
 function ipCheck(req, res, next) {
-    const allowedIP = "181.117.92.19"; // example
+    const allowedIP = "::1";
     
     const requestIP = req.ip;
+
+    console.dir(requestIP);
 
     if (requestIP !== allowedIP) {
         return res.status(403).json({ error: 'Access denied from this IP address.' });

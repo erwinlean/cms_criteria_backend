@@ -6,8 +6,6 @@ async function getProducts(token, code) {
 
     const getProductByCode = `http://192.168.100.45/api/rest/v1/products/${code}`;
 
-    console.log("product code: " + code);
-
     try {
         const options = {
             method: 'GET',

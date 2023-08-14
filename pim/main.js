@@ -13,8 +13,6 @@ module.exports = {
         try {
             const accessToken = await getToken();
 
-            console.log("code on the main: " + code)
-
             if (accessToken) {
                 const res = await getProducts(accessToken, code);
 

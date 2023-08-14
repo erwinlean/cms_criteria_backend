@@ -6,19 +6,10 @@ const { createJwtToken } = require("../middlewares/authCreate");
 const { validatePassword, hashPassword } = require("../utils/userUtils");
 
 module.exports={
-    allUsers: async function(req,res,next){
-        try{
-            const allUser = await users.find()
-            res.json(allUser);
-        }catch(err){
-            console.log(err);
-        };
-    },
 
-    userByEmail: async function(req, res, next) { // Untested yet
+    userByEmail: async function(req, res, next) {
         try {
             const userEmail = req.header('User-Email');
-            const userRole = req.header('User-Rol');
     
             const user = await users.findOne({ email: userEmail });
     
@@ -27,11 +18,12 @@ module.exports={
             };
     
             let loginDates;
+            console.log(user.role);
     
-            if (userRole === 'admin') {
+            if (user.role === 'admin') {
                 loginDates = await users.find({}, { email: 1, loginDates: 1 });
-            } else if (userRole === 'provider') {
-                if (user.rol !== 'provider') {
+            } else if (user.role === 'provider') {
+                if (user.role !== 'provider') {
                     return res.status(403).json({ error: 'Unauthorized role' });
                 };
                 loginDates = user.loginDates;
@@ -76,7 +68,7 @@ module.exports={
 
     createUser: async function(req,res,next){
         try{
-            const { name, lastName, sku, email, password, brand, rol } = req.body;
+            const { name, lastName, sku, email, password, brand, role } = req.body;
 
             if (!validatePassword(password)) {
                 return res.status(400).json({ error: "The password must contain at least 8 characters, including letters and numbers." });
@@ -91,7 +83,7 @@ module.exports={
                 email,
                 password: hashedPassword,
                 brand,
-                rol
+                role
             });
 
             const { password: userPassword, ...userWithoutPassword } = user.toObject();
