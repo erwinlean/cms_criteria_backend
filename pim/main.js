@@ -9,12 +9,12 @@ const postProduct = require("./functions/postProducts");
 // Main
 module.exports = {
 
-    getProductsPim: async function (code){
+    getProductsPim: async function (){
         try {
             const accessToken = await getToken();
 
             if (accessToken) {
-                const res = await getProducts(accessToken, code);
+                const res = await getProducts(accessToken);
 
                 return res;
             };
@@ -32,7 +32,7 @@ module.exports = {
 
                 const res = await postProduct(accessToken, matchData(data));
 
-                console.log(`post eneded {data.identifier}`);
+                //console.log(`post eneded {data.identifier}`);
             };
         } catch (error) {
             console.error('Something went wrong:', error.message);

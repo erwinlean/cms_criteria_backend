@@ -1,7 +1,7 @@
 "use strict";
 
 function ipCheck(req, res, next) {
-    const allowedIP = "::1";
+    const allowedIP = "::1"; // localhost
     
     const requestIP = req.ip;
 

@@ -1,11 +1,13 @@
 "use strict";
 
 const axios = require('axios');
+require('dotenv').config();
+const akeneoUrl = process.env.akeneo_URL
 
-async function getProducts(token, code) {
+async function getProducts(token) {
 
-    const getProductByCode = `http://192.168.100.45/api/rest/v1/products/${code}`;
-
+    const getProductByCode = `${akeneoUrl}/api/rest/v1/products/`;
+    
     try {
         const options = {
             method: 'GET',

@@ -1,9 +1,11 @@
 "use strict";
 
 const axios = require(`axios`);
+require('dotenv').config();
+const akeneoUrl = process.env.akeneo_URL
 
 async function postProduct(token, data) {
-    const postUrl = "http://192.168.100.45/api/rest/v1/products";
+    const postUrl = `${akeneoUrl}/api/rest/v1/products`;
 
     const options = {
         method: 'POST',

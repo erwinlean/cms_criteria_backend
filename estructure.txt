@@ -19,6 +19,7 @@ project/
 |   |-- errorHandler.js
 |   |-- tokenVerify.js
 |-- node_Modules
+|   |-- AllNodeModules
 |-- pim
 |   |-- functions
 |   |   |-- getProducts.js
@@ -30,6 +31,7 @@ project/
 |   |   |-- tokenObtencion.js
 |   |-- main.js
 |-- public
+|   |-- doesntUseThis
 |-- routes
 |   |-- auth.js
 |   |-- consumer.js

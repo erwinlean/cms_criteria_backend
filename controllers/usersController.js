@@ -18,7 +18,6 @@ module.exports={
             };
     
             let loginDates;
-            console.log(user.role);
     
             if (user.role === 'admin') {
                 loginDates = await users.find({}, { email: 1, loginDates: 1 });
@@ -26,6 +25,7 @@ module.exports={
                 if (user.role !== 'provider') {
                     return res.status(403).json({ error: 'Unauthorized role' });
                 };
+
                 loginDates = user.loginDates;
             } else {
                 return res.status(403).json({ error: 'Unauthorized role' });

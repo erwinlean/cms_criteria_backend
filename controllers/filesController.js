@@ -53,10 +53,13 @@ module.exports = {
             if (user.role === "admin") {
                 const files = await Files.find();
                 res.json(files);
+
             } else if (user.role === "provider") {
                 if (userEmail) {
                     const files = await Files.find({ userUpload: userEmail });
+
                     res.json(files);
+
                 } else {
                     res.status(400).json({ error: 'Email missing in request' });
                 };
@@ -76,7 +79,7 @@ module.exports = {
                 res.json(deletedFile);
             } else {
                 res.status(404).json({ error: 'File missing' });
-            }
+            };
         } catch (error) {
             res.status(500).json({ error: 'Error deleting the file' });
         };

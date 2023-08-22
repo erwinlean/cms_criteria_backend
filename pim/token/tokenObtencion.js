@@ -1,14 +1,16 @@
 "use strict";
 
 const axios = require(`axios`);
+require('dotenv').config();
+const akeneoUrl = process.env.akeneo_URL
+const client_id = process.env.akeneo_client_id;
+const secret = process.env.akeneo_secret;
+const username = process.env.akeneo_username;
+const password = process.env.akeneo_password;
 
 async function getToken() {
 
-    const client_id = "4_6cpr958hjicksso4wksggsc840o8c4g8c0wok08woog4wsg8kw";
-    const secret = "2tyf4wdcbtoggw4kgg80ocss00k0wk8o48gowgk44ooog04ww4";
-    const username = "suppliersportal_2719";
-    const password = "c5843a6cb";
-    const token_url = "http://192.168.100.45/api/oauth/v1/token";
+    const token_url = `${akeneoUrl}/api/oauth/v1/token`;
 
     try {
         const encodedCredentials = Buffer.from(`${client_id}:${secret}`).toString('base64');

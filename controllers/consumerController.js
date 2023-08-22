@@ -5,13 +5,13 @@ const { getProductsPim } = require("../pim/main")
 module.exports = {
     getProduct: async function (req, res, next) {
         try {
-            const { code } = req.body;
+            const {userRole} = req.header('User-role');
             
-            if (!code) {
-                res.status(403).json({ error: 'Product code is required' });
+            if (userRole == "provider") { // Access for admin and consumer role
+                res.status(403).json({ error: 'Unauthorized access' });
             };
 
-            const product = await getProductsPim(code);
+            const product = await getProductsPim();
 
             res.status(200).json(product);
         } catch (error) {
