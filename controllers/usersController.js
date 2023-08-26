@@ -1,6 +1,7 @@
 "use strict";
 
 const users = require ("../schemas/userSchema"); 
+const files = require("../schemas/filesSchema");
 const bcrypt = require("bcrypt");
 const { createJwtToken } = require("../middlewares/authCreate");
 const { validatePassword, hashPassword } = require("../utils/userUtils");
@@ -123,8 +124,7 @@ module.exports={
 
     deleteUser: async function (req, res, next) {
         try {
-            const { email } = req.body;
-    
+            const emailToDelete = req.params.email;
             const requesterEmail = req.header("User-Email");
             const requester = await users.findOne({ email: requesterEmail });
     
@@ -136,13 +136,14 @@ module.exports={
             };
     
             // delete the user
-            const deletedUser = await users.findOneAndDelete({ email });
+            const deletedUser = await users.findOneAndDelete({ email: emailToDelete });
             if (!deletedUser) {
                 console.log("Error: No se encontró ningún usuario con el email proporcionado");
                 return res.status(404).json({ error: "User not found" });
             };
-    
-            res.json({ message: "User deleted successfully" });
+            const deletedFiles = await files.deleteMany({ userUpload: emailToDelete });
+
+            res.json({ message: `User ${emailToDelete} deleted successfully. Deleted ${deletedFiles} files.` });
         } catch (err) {
             console.log(err);
             next(err);

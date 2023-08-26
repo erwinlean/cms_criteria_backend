@@ -17,7 +17,7 @@ module.exports = {
             });
 
             /*Check role of the user */
-            const user = await Users.findOne({ email: userEmail });
+            const user = await Users.findOne({ email: userUpload });
 
             if(user.role == "consumer"){
                 res.status(403).json({ error: 'Unauthorized role' });
