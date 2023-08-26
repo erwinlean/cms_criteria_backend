@@ -7,34 +7,52 @@ const { validatePassword, hashPassword } = require("../utils/userUtils");
 
 module.exports={
 
+    getUsers: async function (req, res, next) {
+        const userEmail = req.header("User-Email");
+    
+        const user = await users.findOne({ email: userEmail });
+            
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }else if(user.role !== "admin"){
+            return res.status(403).json({ error: "Unauthorized role" });
+        }else {
+            try {
+                const allUsers = await users.find({}, { email: 1, brand: 1 });
+    
+                return res.status(200).json(allUsers);
+            } catch (error) {
+                console.error(error);
+                return res.status(500).json({ error: "Internal server error" });
+            };
+        };
+    },
+
     userByEmail: async function(req, res, next) {
         try {
-            const userEmail = req.header('User-Email');
+            const userEmail = req.header("User-Email");
     
             const user = await users.findOne({ email: userEmail });
     
             if (!user) {
-                return res.status(404).json({ error: 'User not found' });
+                return res.status(404).json({ error: "User not found" });
             };
     
             let loginDates;
     
-            if (user.role === 'admin') {
+            if (user.role === "admin") {
                 loginDates = await users.find({}, { email: 1, loginDates: 1 });
-            } else if (user.role === 'provider') {
-                if (user.role !== 'provider') {
-                    return res.status(403).json({ error: 'Unauthorized role' });
-                };
-
+            } else if (user.role === "provider") {
                 loginDates = user.loginDates;
             } else {
-                return res.status(403).json({ error: 'Unauthorized role' });
+                return res.status(403).json({ error: "Unauthorized role" });
             };
     
             res.json({ loginDates });
         } catch (err) {
             console.log(err);
-            res.status(500).json({ error: 'Internal server error' });
+            res.status(500).json({ error: "Internal server error" });
         };
     },    
 
@@ -58,7 +76,7 @@ module.exports={
             const jwtToken = createJwtToken(user);
 
             await users.findOneAndUpdate({ email: req.body.email }, { $push: { loginDates: new Date() } });
-
+            
             res.json({ token: jwtToken, user: userWithoutPassword });
         } catch (err) {
             console.log(err);
@@ -68,7 +86,12 @@ module.exports={
 
     createUser: async function(req,res,next){
         try{
-            const { name, lastName, sku, email, password, brand, role } = req.body;
+            const { name, lastName, sku, email, password, brand, role} = req.body;
+            const requester = await users.findOne({ email: req.header("User-Email") });
+
+            if (requester.role !== "admin") {
+                return res.status(403).json({ error: "Only admins can create users" });
+            };
 
             if (!validatePassword(password)) {
                 return res.status(400).json({ error: "The password must contain at least 8 characters, including letters and numbers." });
@@ -99,16 +122,26 @@ module.exports={
     },
 
     deleteUser: async function (req, res, next) {
-        try{
-            const { email } = req.params;
-
+        try {
+            const { email } = req.body;
+    
+            const requesterEmail = req.header("User-Email");
+            const requester = await users.findOne({ email: requesterEmail });
+    
+            if (!requester) {
+                return res.status(404).json({ error: "Requester not found" });
+            };
+            if (requester.role !== "admin") {
+                return res.status(403).json({ error: "Unauthorized role" });
+            };
+    
+            // delete the user
             const deletedUser = await users.findOneAndDelete({ email });
-
             if (!deletedUser) {
                 console.log("Error: No se encontró ningún usuario con el email proporcionado");
                 return res.status(404).json({ error: "User not found" });
             };
-
+    
             res.json({ message: "User deleted successfully" });
         } catch (err) {
             console.log(err);
@@ -127,32 +160,38 @@ module.exports={
         };
     },
 
-    updateUser: async function(req, res) {
+    updateUser: async function (req, res) {
         try {
-            const { email, password, ...updatedFields } = req.body;
+            const { email, oldPassword, ...updatedFields } = req.body;
     
+            // Verify the old password
             const user = await users.findOne({ email });
-
             if (!user) {
-                return res.status(404).json({ error: 'User not found' });
+                return res.status(404).json({ error: "User not found" });
             };
-
-            Object.keys(updatedFields).forEach(key => {
+    
+            // Check if the provided old password matches the user"s actual password
+            const isOldPasswordValid = await comparePassword(oldPassword, user.password);
+            if (!isOldPasswordValid) {
+                return res.status(401).json({ error: "Old password is incorrect" });
+            };
+    
+            Object.keys(updatedFields).forEach((key) => {
                 user[key] = updatedFields[key];
             });
-
-            if (password) {
-                const hashedPassword = hashPassword(password);
+    
+            // Update the password only if a new password is provided
+            if (updatedFields.password) {
+                const hashedPassword = hashPassword(updatedFields.password);
                 user.password = hashedPassword;
             };
-
-            await user.save();
-            const { password: userPassword, ...updatedUser } = user.toObject();
     
-            res.json(updatedUser);
+            await user.save();
+            const { password, ...userWithoutPassword } = user.toObject();
+            res.json(userWithoutPassword);
         } catch (error) {
             console.log(error);
-            res.status(500).json({ error: 'Error updating user' });
+            res.status(500).json({ error: "Error updating user" });
         };
-    } 
+    }
 };

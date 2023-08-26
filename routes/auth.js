@@ -5,6 +5,6 @@ const router = express.Router();
 const { token } = require("../controllers/authController");
 const ipCheck = require("../middlewares/ipVerify");
 
-router.post('/v1/token', ipCheck, token);
+router.post('/v1/token', /*ipCheck,*/ token);
 
 module.exports = router; 

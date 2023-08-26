@@ -16,6 +16,13 @@ module.exports = {
                 data,
             });
 
+            /*Check role of the user */
+            const user = await Users.findOne({ email: userEmail });
+
+            if(user.role == "consumer"){
+                res.status(403).json({ error: 'Unauthorized role' });
+            };
+
             const savedFile = await file.save();
             
             // Upload file to the user
