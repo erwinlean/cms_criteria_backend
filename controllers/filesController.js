@@ -61,15 +61,10 @@ module.exports = {
                 const files = await Files.find();
                 res.json(files);
 
-            } else if (user.role === "provider") {
-                if (userEmail) {
-                    const files = await Files.find({ userUpload: userEmail });
+            } else if (user.role == "provider") {
+                const files = await Files.find({ userUpload: userEmail });
 
-                    res.json(files);
-
-                } else {
-                    res.status(400).json({ error: 'Email missing in request' });
-                };
+                res.json(files);
             } else {
                 res.status(403).json({ error: 'Unauthorized role' });
             };

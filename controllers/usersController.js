@@ -30,27 +30,31 @@ module.exports={
         };
     },
 
-    userByEmail: async function(req, res, next) {
+    userByEmail: async function (req, res, next) {
         try {
             const userEmail = req.header("User-Email");
-    
             const user = await users.findOne({ email: userEmail });
     
             if (!user) {
                 return res.status(404).json({ error: "User not found" });
             };
     
-            let loginDates;
-    
-            if (user.role === "admin") {
-                loginDates = await users.find({}, { email: 1, loginDates: 1 });
-            } else if (user.role === "provider") {
-                loginDates = user.loginDates;
-            } else {
-                return res.status(403).json({ error: "Unauthorized role" });
+            let allUserData = await users.find({}, { email: 1, loginDates: 1 });
+            let responseData;
+
+            switch (user.role) {
+                case "admin":
+                    responseData = { allUserData };
+                    break;
+                case "provider":
+                    let userData = await users.findOne({ email: userEmail }, { email: 1, loginDates: 1 });
+                    responseData = { userData };
+                    break;
+                default:
+                    return res.status(403).json({ error: "Unauthorized role" });
             };
     
-            res.json({ loginDates });
+            res.json(responseData);
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal server error" });
@@ -73,7 +77,6 @@ module.exports={
             };
 
             const { password, ...userWithoutPassword } = user.toObject();
-
             const jwtToken = createJwtToken(user);
 
             await users.findOneAndUpdate({ email: req.body.email }, { $push: { loginDates: new Date() } });
