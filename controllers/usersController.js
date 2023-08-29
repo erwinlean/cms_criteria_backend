@@ -110,6 +110,7 @@ module.exports={
                 email,
                 password: hashedPassword,
                 brand,
+                provider,
                 role
             });
 
@@ -166,7 +167,9 @@ module.exports={
 
     updateUser: async function (req, res) {
         try {
-            const { email, oldPassword, ...updatedFields } = req.body;
+            const { email, ...updatedFields } = req.body;
+    
+            console.log(email, updatedFields);
     
             // Verify the old password
             const user = await users.findOne({ email });
@@ -174,15 +177,17 @@ module.exports={
                 return res.status(404).json({ error: "User not found" });
             };
     
-            // Check if the provided old password matches the user"s actual password
-            const isOldPasswordValid = await comparePassword(oldPassword, user.password);
-            if (!isOldPasswordValid) {
-                return res.status(401).json({ error: "Old password is incorrect" });
-            };
-    
-            Object.keys(updatedFields).forEach((key) => {
+            // If user want to change the pass must check the old password is match with the one is seended.
+            for (const key of Object.keys(updatedFields)) {
+                if (key === "oldPassword") {
+                    // Check if the provided old password matches the user's actual password
+                    const isOldPasswordValid = await comparePassword(updatedFields.oldPassword, user.password);
+                    if (!isOldPasswordValid) {
+                        return res.status(401).json({ error: "Old password is incorrect" });
+                    };
+                };
                 user[key] = updatedFields[key];
-            });
+            };
     
             // Update the password only if a new password is provided
             if (updatedFields.password) {
