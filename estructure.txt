@@ -2,6 +2,8 @@ project/
 |-- bin/
 |   |-- www.js
 |-- controllers/
+|   |-- pdfController.js
+|   |-- resetPasswordController.js
 |   |-- consumerController.js
 |   |-- authController.js
 |   |-- filesController.js
@@ -33,6 +35,8 @@ project/
 |-- public
 |   |-- doesntUseThis
 |-- routes
+|   |-- pdf.js
+|   |-- passwordReset.js
 |   |-- auth.js
 |   |-- consumer.js
 |   |-- files.js
@@ -49,6 +53,7 @@ project/
 |   |-- consumer.test.js
 |-- utils
 |   |-- userUtils.js
+|   |-- sendMail.js
 |-- views
 |-- .env
 |-- .gitignore

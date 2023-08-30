@@ -110,7 +110,7 @@ module.exports={
                 email,
                 password: hashedPassword,
                 brand,
-                provider,
+                //provider,
                 role
             });
 

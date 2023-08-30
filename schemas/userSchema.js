@@ -18,9 +18,9 @@ const users = mongoose.Schema({
         type: String,
         require: true,
     },
-    provider: {
-        type: String,
-    },
+    //provider: {
+    //    type: String,
+    //},
     role: {
         type: String,
         require: true,

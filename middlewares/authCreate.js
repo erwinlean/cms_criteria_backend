@@ -33,5 +33,14 @@ module.exports = {
                 expiresIn: "24h",
             }
         );
+    },
+
+    createResetToken: function () {
+        return jwt.sign(
+            "resetTokenKey",
+            {
+                expiresIn: "24h",
+            }
+        );
     }
 };

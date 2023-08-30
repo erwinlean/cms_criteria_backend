@@ -5,7 +5,7 @@ function schema(identifier, attributes) {
         //"uuid": uuid, // Self create in PIM
         "identifier": identifier,
         "enabled": false, // Enable should be set on the PIM UI by admin
-        "family": null,
+        "family": [IDK],
         "categories": ["to_approve"], // categories, (category create for latter aprove in the PIM)
         "groups": [],
         "values": attributes // All the atributes here, inside object {}

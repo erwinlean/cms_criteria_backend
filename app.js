@@ -12,7 +12,9 @@ const indexRouter = require("./routes/index");
 const oAuthRouter = require("./routes/auth");
 const consumerRouter = require("./routes/consumer");
 const userRouter = require("./routes/users");
-const fileController = require("./routes/files");
+const fileRouter = require("./routes/files");
+const resetRouter = require("./routes/passwordReset");
+const pdfRouter = require("./routes/pdf");
 
 const app = express();
 
@@ -34,13 +36,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);                   // tested fine > mocha chai + postman
-app.use("/api/", indexRouter);               // tested fine > mocha chai + postman
-app.use("/api/oAuth", oAuthRouter);          // tested fine > mocha chai + postman
-app.use("/api/consumer", consumerRouter);    // tested fine > postman
-app.use("/api/users", userRouter);           // tested fine > postman
-app.use("/api/files", fileController);       // tested fine > postman + frontend
-
+app.use("/", indexRouter);                   // tested fine > mocha chai + postman + frontend
+app.use("/api/", indexRouter);               // tested fine > mocha chai + postman + frontend
+app.use("/api/oAuth", oAuthRouter);          // tested fine > mocha chai + postman + frontend
+app.use("/api/consumer", consumerRouter);    // tested fine > postman + frontend
+app.use("/api/users", userRouter);           // tested fine > postman + frontend
+app.use("/api/files", fileRouter);           // tested fine > postman + frontend
+app.use("/api/pdf", pdfRouter);              // PDF generator untested
+app.use("/api/reset", resetRouter);          // Reset password by email untested
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
