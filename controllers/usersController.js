@@ -64,7 +64,7 @@ module.exports={
     userLogin: async function(req, res, next) {
         try {
             const user = await users.findOne({ email: req.body.email });
-
+            console.log(user);
             if (!user) {
                 console.log("Error: No matching email found");
                 return res.status(401).json({ error: "No matching email found" });

@@ -51,7 +51,7 @@ module.exports = {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       };
-      
+      console.log(newPassword, email);
       const hashedPassword = hashPassword(newPassword);
       user.password = hashedPassword;
       
