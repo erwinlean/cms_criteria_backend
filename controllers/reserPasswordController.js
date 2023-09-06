@@ -3,6 +3,7 @@
 const users = require("../schemas/userSchema");
 const { sendResetEmail } = require("../utils/sendMail");
 const { createResetToken } = require("../middlewares/authCreate");
+const { hashPassword } = require("../utils/userUtils");
 
 module.exports = {
   // First function. receibe petition from frontend, and send the email to the user email
@@ -50,10 +51,12 @@ module.exports = {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       };
-  
-      user.password = newPassword;
+      
+      const hashedPassword = hashPassword(newPassword);
+      user.password = hashedPassword;
+      
       await user.save();
-  
+
       res.json({ message: "Password reset successful" });
     } catch (error) {
       console.error(error);
