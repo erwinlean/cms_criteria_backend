@@ -7,7 +7,7 @@ const jsonWebT = require("../middlewares/authVerify");
 
 // Reset password endpoint /api/reset/password and redirect to user reset password endpoint and frontend same thing
 router.post("/password", passwordReset);
-router.post("/:token", redirect);
-router.post("/confirm-password-reset", jsonWebT,confirmPasswordReset);
+router.get("/password/:token", redirect);
+router.post("/confirm", jsonWebT,confirmPasswordReset);
 
 module.exports = router;

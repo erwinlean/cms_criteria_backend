@@ -37,7 +37,10 @@ module.exports = {
 
     createResetToken: function () {
         return jwt.sign(
-            "resetTokenKey",
+            {
+                resetTokenKey: "resetTokenKey"
+            },
+            "tokenKey",
             {
                 expiresIn: "24h",
             }
