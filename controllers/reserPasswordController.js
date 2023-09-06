@@ -20,7 +20,7 @@ module.exports = {
       const resetToken = createResetToken();
 
       // TO CHANGE THIS URL FOR API URL PROD
-      const resetLink = `https://criteria-providers.onrender.com//api/reset/password/${resetToken}?email=${email}`;  
+      const resetLink = `https://criteria-providers.onrender.com/api/reset/password/${resetToken}?email=${email}`;  
       sendResetEmail(email, resetLink, userName);
 
       res.json({ message: "Password reset email sent successfully" });
@@ -36,7 +36,7 @@ module.exports = {
 
     // Redirige al frontend with the token and email in the URL
     // TO CHANGE URL FOR FRONTEND URL PROD
-    const redirectURL = `https://criteria-portal.netlify.app//password-reset.html?token=${token}&email=${email}`;
+    const redirectURL = `https://criteria-portal.netlify.app/password-reset.html?token=${token}&email=${email}`;
 
     res.redirect(redirectURL);
   },
