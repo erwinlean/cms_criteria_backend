@@ -2,7 +2,9 @@
 /* Create Auth for user logins, dev and password reset  */
 /* #################################################### */
 /**
- * @params {Object} user
+ * @param {Object} user
+ * All functions returns: 
+ * @returns {string}
  */
 
 "use strict";

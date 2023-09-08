@@ -9,6 +9,7 @@ const router = express.Router();
 const { getProduct } = require("../controllers/consumerController");
 const jsonWebT = require("../middlewares/authVerify");
 
+// Get products endpoint
 router.get("/", jsonWebT, getProduct);
 
 module.exports = router;

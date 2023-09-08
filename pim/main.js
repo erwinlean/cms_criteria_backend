@@ -1,6 +1,10 @@
 /* ################################## */
 /* Main PIM api mannagment (get/post) */
 /* ################################## */
+/**
+ * @param {Array<Object>} data
+ * @returns {Promise}
+ */
 
 "use strict";
 

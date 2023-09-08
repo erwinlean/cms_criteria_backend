@@ -3,8 +3,8 @@
 /* Generated based on the data came fron frontend (dataBrach are attributes and the brand) */
 /* ####################################################################################### */
 /**
- * @params {string} dataBatch
- * @params {string} brand
+ * @param {string} dataBatch
+ * @param {string} brand
  * @returns {Array<Object>}
  */
 

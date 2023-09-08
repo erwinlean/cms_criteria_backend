@@ -3,8 +3,8 @@
 /* app/controllers/fileControllers/.js at function createFile  */
 /* ########################################################### */
 /**
- * @params {string} attributes
- * @params {string} brand
+ * @param {string} attributes
+ * @param {string} brand
  * @returns {Promise}
  */
 

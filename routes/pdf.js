@@ -10,7 +10,9 @@ const router = express.Router();
 const pdfGenerator = require("../controllers/pdfController");
 const jsonWebT = require("../middlewares/authVerify");
 
+// Handle pdf uploads
 router.use(fileUpload());
+// Create pdf endpoint
 router.post("/create", jsonWebT, pdfGenerator);
 
 module.exports = router;
