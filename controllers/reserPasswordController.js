@@ -1,12 +1,19 @@
+/* ############################################################################################################ */
+/* Reset password controller, send email, to the user, redirect to endpoint and then confirm the reset password */
+/* ############################################################################################################ */
+
 "use strict";
 
 const users = require("../schemas/userSchema");
+// Email send function
 const { sendResetEmail } = require("../utils/sendMail");
+// Create token for reset password
 const { createResetToken } = require("../middlewares/authCreate");
 const { hashPassword } = require("../utils/userUtils");
 
 module.exports = {
-  // First function. receibe petition from frontend, and send the email to the user email
+
+  // Receibe petition from frontend, and send the email to the user email
   passwordReset: async function (req, res, next) {
     try {
       const { email } = req.body;
@@ -20,7 +27,7 @@ module.exports = {
 
       const resetToken = createResetToken();
 
-      // TO CHANGE THIS URL FOR API URL PROD
+      // Generate link and send via Email to the user
       const resetLink = `https://criteria-providers.onrender.com/api/reset/password/${resetToken}?email=${email}`;  
       sendResetEmail(email, resetLink, userName);
 
@@ -31,17 +38,18 @@ module.exports = {
     };
   },
 
+  /* Redirect user endpoint to Frontend */
   redirect: async function (req, res, next) {
     const { token } = req.params;
     const { email } = req.query;
 
-    // Redirige al frontend with the token and email in the URL
-    // TO CHANGE URL FOR FRONTEND URL PROD
+    // when the user is sended by the email to this endpoint function, redirect the user to the Frontend, with the token and user email.
     const redirectURL = `https://criteria-portal.netlify.app/password-reset.html?token=${token}&email=${email}`;
 
     res.redirect(redirectURL);
   },
 
+  /* request the new password and email (the token is verified at the router) and update the user */
   confirmPasswordReset: async function (req, res, next) {
     try {
       const { newPassword, email } = req.body;
@@ -51,10 +59,10 @@ module.exports = {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       };
-      console.log(newPassword, email);
+
+      // Hash the new password, and save the user
       const hashedPassword = hashPassword(newPassword);
       user.password = hashedPassword;
-      
       await user.save();
 
       res.json({ message: "Password reset successful" });

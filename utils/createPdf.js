@@ -1,17 +1,26 @@
+/* ############################################################################# */
+/* This function create the pdf, based on the data sended from FrontEnd products */
+/* ############################################################################# */
+/**
+* @param {Array.<Object>} data
+* @returns {jsPDF}
+*/
+
 "use strict";
 
 const { jsPDF } = require("jspdf");
 const getImageDataUri = require("./createImages");
 
 async function pdfPerse(data) {
+
     /* Create the pdf */
     try {
         const pdfDoc = new jsPDF();
 
-        // Define the position for the title
+        // Position for the title
         const titleX = 20;
         const titleY = 20;
-        // Define the font and style for the title
+        // Font and style for the title
         pdfDoc.setFont("Arial", "bold");
         pdfDoc.setFontSize(24);
         pdfDoc.text(titleX, titleY, "Productos seleccionados");
@@ -25,18 +34,20 @@ async function pdfPerse(data) {
         const logoUri = await getImageDataUri(logoURL);
         pdfDoc.addImage(logoUri, "PNG", imageX, imageY, imageWidth, imageHeight);
 
-        // Define the position for the product data
+        // Position for the product data
         let productDataX = 20;
         let productDataY = 45;
-        // Define the font and style for the product data
+        // Font and style for the product data
         pdfDoc.setFont("Arial", "normal");
         pdfDoc.setFontSize(12);
 
-        // Set line height (spacing) between paragraphs/lines
+        // Spacing between lines
         const lineHeight = 12;
 
         // Use Promise.all to fetch and add images to the PDF
         await Promise.all(
+            /* Products informations */
+
             data.map(async (productInfo, index) => {
                 // Create a string with formatted product information
                 let productInfoString = `${productInfo.sku}\n`;

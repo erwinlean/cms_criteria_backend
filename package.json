@@ -6,6 +6,8 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@llama-node/core": "^0.1.6",
+    "@llama-node/llama-cpp": "^0.1.6",
     "axios": "^1.5.0",
     "base-64": "^1.0.0",
     "bcrypt": "^5.1.0",

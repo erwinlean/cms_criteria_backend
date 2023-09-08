@@ -1,10 +1,14 @@
+/* ########### */
+/* Cors access */
+/* ########### */
+
 "use strict";
 
 const cors = require('cors');
 
 function corsConfig(req, res, next) {
     const corsOptions = {
-        origin: '*'
+        origin: '*' // To modify, in prod
     };
     
     cors(corsOptions)(req, res, next);

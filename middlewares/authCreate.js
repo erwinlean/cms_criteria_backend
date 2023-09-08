@@ -1,9 +1,19 @@
+/* #################################################### */
+/* Create Auth for user logins, dev and password reset  */
+/* #################################################### */
+/**
+ * @params {Object} user
+ */
+
 "use strict";
 
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
+const secretKey = process.env.JWT_SECRET;
 
 module.exports = {
 
+    // Login
     createJwtToken: function (user) {
         return jwt.sign(
             {
@@ -16,31 +26,33 @@ module.exports = {
                 userLoginDates: user.loginDates,
                 userFilesUploaded: user.filesUploaded,
             },
-            "tokenKey",
+            secretKey,
             {
                 expiresIn: "2h",
             }
         );
     },
 
+    // Dev
     createJwtTokenDev: function () {
         return jwt.sign(
             {
                 role: "developer",
             },
-            "tokenKey",
+            secretKey,
             {
                 expiresIn: "24h",
             }
         );
     },
 
+    // Password reset
     createResetToken: function () {
         return jwt.sign(
             {
                 resetTokenKey: "resetTokenKey"
             },
-            "tokenKey",
+            secretKey,
             {
                 expiresIn: "24h",
             }

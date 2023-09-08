@@ -1,3 +1,12 @@
+/* ############################################ */
+/* Get the all the products of the current PIM  */
+/* Bearer token type                            */
+/* ############################################ */
+/**
+ * @param {string} token
+ * @returns {Object}
+ */
+
 "use strict";
 
 const axios = require('axios');

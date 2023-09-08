@@ -1,10 +1,17 @@
+/* ###################################################### */
+/* This controller, is crud for files sended by the user  */
+/* ###################################################### */
+
 "use strict";
 
 const Files = require("../schemas/filesSchema");
 const Users = require("../schemas/userSchema");
-const { postProductPim } = require("../pim/main");
+//const { postProductPim } = require("../pim/main"); >>>  Not posting  on the PIM, using PIM in prod, to change credentials.
+//const processDescriptions = require("../ia-api/main"); >>> Not using AI generator Descripcion (API request limitation to fix)
 
 module.exports = {
+
+    /* Create the fileand save to the user uploader */
     createFile: async function (req, res) {
         try {
             const { fileName, brand, data, userUpload } = req.body;
@@ -41,8 +48,14 @@ module.exports = {
                 res.status(500).json({ error: 'No data to post on PIM' });
             };
 
-            const attributesData = file.data;
-            attributesData.forEach(element => { postProductPim(element) });
+            /* Ai generator descripcion, Not in used for API request limitation.*/
+
+            //const userBrand = user.brand;
+            //const attributesData = file.data;
+            //const newAtributes = await processDescriptions(attributesData, userBrand);
+
+            /* Commented post product to PIM, current PIM on prod, to change credentials, for test PIM credentials. */
+            //attributesData.forEach(element => { postProductPim(element) });
             
             res.status(201).json(savedFile);
         } catch (error) {
@@ -51,6 +64,8 @@ module.exports = {
         };
     },
 
+
+    /* Get f iles, based on the role of the current user */
     getFiles: async function (req, res) {
         try {
             const userEmail = req.header('User-Email');
@@ -73,6 +88,7 @@ module.exports = {
         };
     },
 
+    /* Delete file based on the user and the file name */
     deleteFile: async function (req, res) {
         try {
             const { fileName, userUpload } = req.params;
@@ -87,6 +103,7 @@ module.exports = {
         };
     },
 
+    /* Destroy all files, this will be not to be used in prod */
     deleteAllFiles: async function (req, res, next) {
         try {
             await Files.deleteMany();

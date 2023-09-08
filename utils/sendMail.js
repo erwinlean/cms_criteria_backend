@@ -1,9 +1,21 @@
+/* #################################################################### */
+/* This f unction send the email to the user request the password reset */
+/* #################################################################### */
+/**
+ * @param {string} userEmail
+ * @param {string} resetLink
+ * @param {string} userName
+ * @returns {void}
+ */
+
 "use strict";
 
 const nodemailer = require("nodemailer");
+// Style for email function
 const htmlMail = require("./emailStyle");
 require("dotenv").config();
 
+// Variables and transporter
 const mailerUrl = process.env.MAILER;
 const transporter = nodemailer.createTransport(mailerUrl);
 

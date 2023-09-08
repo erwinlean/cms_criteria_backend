@@ -1,13 +1,20 @@
+/* ############################################################################################ */
+/* User mannagment, get users, get users logins, delete users, update user data and create user */
+/* ############################################################################################ */
+
 "use strict";
 
 const users = require ("../schemas/userSchema"); 
 const files = require("../schemas/filesSchema");
 const bcrypt = require("bcrypt");
+// Create token function
 const { createJwtToken } = require("../middlewares/authCreate");
+// Validate and hash password functions
 const { validatePassword, hashPassword } = require("../utils/userUtils");
 
 module.exports={
 
+    /* Get users and brand fetched, for list of users for the admin */
     getUsers: async function (req, res, next) {
         const userEmail = req.header("User-Email");
     
@@ -30,6 +37,7 @@ module.exports={
         };
     },
 
+    /* Get users and his logins dates (admin can see all the users logins, provider only his) */
     userByEmail: async function (req, res, next) {
         try {
             const userEmail = req.header("User-Email");
@@ -61,6 +69,7 @@ module.exports={
         };
     },    
 
+    /* Login into the app mannagment */
     userLogin: async function(req, res, next) {
         try {
             const user = await users.findOne({ email: req.body.email });
@@ -88,6 +97,7 @@ module.exports={
         };
     },
 
+    /* Create user */
     createUser: async function(req,res,next){
         try{
             const { name, lastName, sku, email, password, brand, role} = req.body;
@@ -126,6 +136,7 @@ module.exports={
         };
     },
 
+    /* Delete user, for the admin */
     deleteUser: async function (req, res, next) {
         try {
             const emailToDelete = req.params.email;
@@ -154,6 +165,7 @@ module.exports={
         };
     },
 
+    /* Delete all user, this should be commented or deleted in PROD */
     deleteAllUsers: async function (req, res, next) {
         try {
             await users.deleteMany();
@@ -165,6 +177,7 @@ module.exports={
         };
     },
 
+    /* Upload the user information (perfil mannagment for his own user) */
     updateUser: async function (req, res) {
         try {
             const { email, ...updatedFields } = req.body;

@@ -1,8 +1,19 @@
+/* ############################################# */
+/* Email sended for reset-password, style/format */
+/* ############################################# */
+/**
+ * @param {string} resetLink
+ * @param {string} userName
+ * @returns {string}
+*/
+
 "use strict";
 
 function htmlMail(resetLink, userName) {
+    // Image at header of the email hard-coded
     const logo = "https://media.licdn.com/dms/image/C4D0BAQGcCakBNsoUyw/company-logo_200_200/0/1554238141789?e=1701302400&v=beta&t=tcHx9Hh0Yl8QQ1nEroi8UxmN-8Ed8-R8Guqze_OlFtQ";
 
+    // Style added directly as HTML
     return `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
             <img src=${logo} alt="Logo de la empresa" style="width: 100px; height: auto; margin-bottom: 20px;">

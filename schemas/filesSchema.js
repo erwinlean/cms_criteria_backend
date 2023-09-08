@@ -1,3 +1,7 @@
+/* ##################################################################################### */
+/* Create file schema: file  name, uploader user, brand, upload date, and the data file  */
+/* ##################################################################################### */
+
 "use strict";
 
 const mongoose = require("mongoose");

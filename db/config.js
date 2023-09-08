@@ -1,3 +1,7 @@
+/* ############################################################################## */
+/* DB configuration credentials from .env and connect, using mongoose             */
+/* ############################################################################## */
+
 "use strict";
 
 const mongoose = require('mongoose');

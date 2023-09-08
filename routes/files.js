@@ -1,3 +1,7 @@
+/* ##################################### */
+/* Files router endpoints, require token */
+/* ##################################### */
+
 "use strict";
 
 const express = require('express');

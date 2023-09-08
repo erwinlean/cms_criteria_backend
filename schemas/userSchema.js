@@ -1,3 +1,8 @@
+/* ################################################################# */
+/* Create user schema: name, lastname, email, password, brand, role, */
+/* login dates, and files attached by the user(ID to user schema)    */
+/* ################################################################# */
+
 "use strict";
 
 const mongoose = require("mongoose");

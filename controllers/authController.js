@@ -1,3 +1,7 @@
+/* ######################### */
+/* Generate token controller */
+/* ######################## */
+
 "use strict";
 
 const { createJwtTokenDev } = require("../middlewares/authCreate");

@@ -1,3 +1,7 @@
+/* ############################# */
+/* Informs user bad path for "/" */
+/* ############################# */
+
 "use strict";
 
 const express = require('express');

@@ -1,3 +1,7 @@
+/* ############################################################################## */
+/* Router for the role consumer witch only get information of products at the PIM */
+/* ############################################################################## */
+
 "use strict";
 
 const express = require('express');
