@@ -6,6 +6,7 @@
 
 const Files = require("../schemas/filesSchema");
 const Users = require("../schemas/userSchema");
+const { errorHandler } = require("../utils/errorHandler");
 //const { postProductPim } = require("../pim/main"); >>>  Not posting  on the PIM, using PIM in prod, to change credentials.
 //const processDescriptions = require("../ia-api/main"); >>> Not using AI generator Descripcion (API request limitation to fix)
 
@@ -15,6 +16,10 @@ module.exports = {
     createFile: async function (req, res) {
         try {
             const { fileName, brand, data, userUpload } = req.body;
+
+            if( !fileName || !brand || !data || !userUpload ){
+                return errorHandler(400, `Information missing.`, res);
+            };
 
             const file = new Files({
                 fileName,
@@ -27,7 +32,7 @@ module.exports = {
             const user = await Users.findOne({ email: userUpload });
 
             if(user.role == "consumer"){
-                res.status(403).json({ error: 'Unauthorized role' });
+                return errorHandler(403, "Unauthorized role.", res);
             };
 
             const savedFile = await file.save();
@@ -45,7 +50,7 @@ module.exports = {
 
             // All PIM modify data and methods inside the main
             if(file.data.length == 0){
-                res.status(500).json({ error: 'No data to post on PIM' });
+                return errorHandler(404, "Not data to post in the PIM.", res);
             };
 
             /* Ai generator descripcion, Not in used for API request limitation.*/
@@ -57,10 +62,10 @@ module.exports = {
             /* Commented post product to PIM, current PIM on prod, to change credentials, for test PIM credentials. */
             //attributesData.forEach(element => { postProductPim(element) });
             
-            res.status(201).json(savedFile);
+            return res.status(201).json(savedFile);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ error: 'Error creating the file' });
+            return errorHandler(500, "Error creating the file. Try again latter.", res);
         };
     },
 
@@ -70,21 +75,24 @@ module.exports = {
         try {
             const userEmail = req.header('User-Email');
 
+            if(!userEmail){
+                return errorHandler(404, "Email is required.", res);
+            };
+
             const user = await Users.findOne({ email: userEmail });
 
             if (user.role === "admin") {
                 const files = await Files.find();
-                res.json(files);
-
+                return res.json(files);
             } else if (user.role == "provider") {
                 const files = await Files.find({ userUpload: userEmail });
 
-                res.json(files);
+                return res.json(files);
             } else {
-                res.status(403).json({ error: 'Unauthorized role' });
+                return errorHandler(401, "Unauthorized role.", res);
             };
         } catch (error) {
-            res.status(500).json({ error: 'Error searching for the files' });
+            return errorHandler(500, "Error searchinf the file. Try again latter.", res);
         };
     },
 
@@ -94,12 +102,12 @@ module.exports = {
             const { fileName, userUpload } = req.params;
             const deletedFile = await Files.findOneAndRemove({ fileName, userUpload });
             if (deletedFile) {
-                res.json(deletedFile);
+                return res.json(deletedFile);
             } else {
-                res.status(404).json({ error: 'File missing' });
+                return errorHandler(404, "Missing file", res);
             };
         } catch (error) {
-            res.status(500).json({ error: 'Error deleting the file' });
+            return errorHandler(500, "Error deleting the file.", res);
         };
     },
 
@@ -108,10 +116,10 @@ module.exports = {
         try {
             await Files.deleteMany();
 
-            res.json({ message: "All Files deleted successfully" });
-        } catch (err) {
-            console.error(err);
-            next(err);
+            return res.json({ message: "All Files deleted successfully" });
+        } catch (error) {
+            console.error(error);
+            return errorHandler(500, `${error.message}`, res);
         };
     }
 };

@@ -7,11 +7,16 @@
 
 const fs = require("fs");
 const pdfPerse = require("../utils/createPdf");
+const { errorHandler } = require("../utils/errorHandler");
 
 async function pdfGenerator(req, res, next){
 
     try {
         const data = req.body
+
+        if(!data){
+            return errorHandler(400, "The data is required for process.", res);
+        };
 
         /* Exported function for create PDF */
         const pdfDoc = await pdfPerse(data);
@@ -27,10 +32,10 @@ async function pdfGenerator(req, res, next){
         fs.unlinkSync(tempFileName);
 
         // Response to frontend
-        res.status(200).json({ pdfDataUri });
+        return res.status(200).json({ pdfDataUri });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error generating PDF" });
+        return errorHandler(500, "Error updating user", res);
     };
 };
 

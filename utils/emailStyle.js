@@ -26,6 +26,6 @@ function htmlMail(resetLink, userName) {
             <p>Si no has solicitado esto, por favor ignora este correo electrónico.</p>
         </div>
     `;
-}
+};
 
 module.exports = htmlMail;

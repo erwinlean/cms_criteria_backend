@@ -10,6 +10,7 @@ const { sendResetEmail } = require("../utils/sendMail");
 // Create token for reset password
 const { createResetToken } = require("../middlewares/authCreate");
 const { hashPassword } = require("../utils/userUtils");
+const { errorHandler } = require("../utils/errorHandler");
 
 module.exports = {
 
@@ -18,23 +19,27 @@ module.exports = {
     try {
       const { email } = req.body;
 
+      if(!email){
+        return errorHandler(400, "Email is required.", res);
+      };
+
       const user = await users.findOne({ email });
 
       if (!user) {
-        return res.status(404).json({ message: "Email not found" });
+        return errorHandler(404, "User not found.", res);
       };
-      const userName  = user.name;
 
+      const userName  = user.name;
       const resetToken = createResetToken();
 
       // Generate link and send via Email to the user
       const resetLink = `https://criteria-providers.onrender.com/api/reset/password/${resetToken}?email=${email}`;  
       sendResetEmail(email, resetLink, userName);
 
-      res.json({ message: "Password reset email sent successfully" });
+      return res.json({ message: "Password reset email sent successfully" });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
+      console.log(error);
+      return errorHandler(500, "Internal server error.", res);
     };
   },
 
@@ -43,21 +48,29 @@ module.exports = {
     const { token } = req.params;
     const { email } = req.query;
 
+    if(!token || !email){
+      return errorHandler(400, "Missing peremeter.", res);
+    };
+
     // when the user is sended by the email to this endpoint function, redirect the user to the Frontend, with the token and user email.
     const redirectURL = `https://criteria-portal.netlify.app/password-reset.html?token=${token}&email=${email}`;
 
-    res.redirect(redirectURL);
+    return res.redirect(redirectURL);
   },
 
   /* request the new password and email (the token is verified at the router) and update the user */
   confirmPasswordReset: async function (req, res, next) {
     try {
       const { newPassword, email } = req.body;
+
+      if(!newPassword || !email){
+        return errorHandler(400, "Missing peremeters.", res);
+      };
   
       const user = await users.findOne({ email });
   
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return errorHandler(404, "User not found.", res);
       };
 
       // Hash the new password, and save the user
@@ -65,10 +78,10 @@ module.exports = {
       user.password = hashedPassword;
       await user.save();
 
-      res.json({ message: "Password reset successful" });
+      return res.json({ message: "Password reset successful" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
+      return errorHandler(500, "Internal server error.", res);
     };
   }  
 };

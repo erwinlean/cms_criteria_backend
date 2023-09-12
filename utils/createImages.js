@@ -28,6 +28,7 @@ async function getImageDataUri(imageUrl) {
 
         // Convert to uri, and return
         const dataUri = canvas.toDataURL('image/jpeg');
+        
         return dataUri;
     } catch (error) {
         console.error('Error converting image to Data URI:', error);

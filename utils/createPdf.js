@@ -122,8 +122,8 @@ async function pdfPerse(data) {
 
         return pdfDoc;
     } catch (error) {
-        console.error("Error creating PDF:", error);
-        throw error;
+        console.error("Error creating PDF:", error.message);
+        return error;
     };
 };
 

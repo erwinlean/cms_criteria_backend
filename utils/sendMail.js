@@ -34,8 +34,12 @@ function sendResetEmail(userEmail, resetLink, userName) {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error("Error sending email:", error);
+
+            return;
         } else {
             console.log("Password reset email sent:", info.response);
+
+            return;
         };
     });
 };
