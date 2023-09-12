@@ -19,6 +19,7 @@ async function processDescriptions(attributes, brand) {
         return response;
     } catch (err) {
         console.log("Error: " + err);
+        return err;
     };
 };
 

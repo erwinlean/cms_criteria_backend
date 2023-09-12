@@ -37,7 +37,7 @@ async function getProducts(token) {
 
     } catch (error) {
         console.error('Error getting data:', error.response ? error.response.data : error.message);
-        throw new Error('Error getting data');
+        return errorHandler(error.response.status, error.response.message, res);
     };
 };
 

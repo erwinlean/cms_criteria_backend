@@ -79,6 +79,8 @@ async function createNewDescriptions(dataBatch, brand) {
         return context.data;
     } catch (err) {
         console.log("Error: " + err.message);
+
+        return err;
     };
 };
 

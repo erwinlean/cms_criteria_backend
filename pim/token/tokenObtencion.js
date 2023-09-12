@@ -5,6 +5,7 @@
 "use strict";
 
 const axios = require(`axios`);
+const { errorHandler } = require("../../utils/errorHandler");
 require('dotenv').config();
 
 /* Credentials */
@@ -42,11 +43,14 @@ async function getToken() {
         if (response.status === 200) {
             const accessToken = response.data.access_token;
             return accessToken;
+        }else{
+            errorHandler(response.status, response.message, res);
         };
         
     } catch (error) {
         console.log('Error al obtener el token:', error.response ? error.response.data : error.message);
-        throw new Error('Error al obtener el token');
+        
+        errorHandler(error.response.status, error.response.message, res);
     };
 };
 

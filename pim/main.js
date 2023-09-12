@@ -29,6 +29,7 @@ module.exports = {
             };
         } catch (error) {
             console.error('Something went wrong:', error.message);
+            return errorHandler(404, "Something went wrong getting products.", res);
         };
     },
 
@@ -44,6 +45,8 @@ module.exports = {
 
         } catch (error) {
             console.error('Something went wrong:', error.message);
+
+            return errorHandler(error.response.status, error.response.message, res);
         };
     }
 };

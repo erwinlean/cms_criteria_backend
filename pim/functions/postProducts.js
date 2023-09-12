@@ -39,7 +39,7 @@ async function postProduct(token, data) {
         return response;
     } catch (error) {
         console.log('Error posting data:', error.response.data);
-        throw new Error('Error posting data');
+        return errorHandler(error.response.status, error.response.message)
     };
 };
 
