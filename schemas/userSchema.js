@@ -23,6 +23,7 @@ const users = mongoose.Schema({
         type: String,
         require: true,
     },
+    // Should add that the admin owner (of the "CMS"), can change the api acredenials,so admin credentials to the "apis" should be add to the rols endpoints and controllers
     //provider: {
     //    type: String,
     //},
